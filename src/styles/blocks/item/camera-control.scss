@@ -1,0 +1,11 @@
+.info-item-camera-control {
+    display: flex;
+    flex-shrink: 0;
+    margin-top: 20px;
+    font-size: 18px;
+    justify-content: space-between;
+
+    @include tablets {
+        font-size: 14px;
+    }
+}

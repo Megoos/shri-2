@@ -1,0 +1,45 @@
+.info-item__icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+
+    @include tablets {
+        height: 35px;
+        width: 35px;
+    }
+}
+
+.info-item-icon {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    fill: $main;
+
+    &__next {
+        background-image: url('../img/icons/Prev.svg');
+        transform: rotate(180deg);
+    }
+
+    &__prev {
+        background-image: url('../img/icons/Prev.svg'); 
+    }
+
+    &__cross {
+        background-image: url('../img/icons/cross.svg');
+
+        &.white {
+            background-image: url('../img/icons/cross-white.svg');
+        }
+    }
+
+    &.critical {
+        fill: white;
+    }
+  }
+    

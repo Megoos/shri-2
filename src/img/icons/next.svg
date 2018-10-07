@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="16px" viewBox="0 0 10 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>next-white</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Events" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Assets" transform="translate(-829.000000, -400.000000)">
+            <rect id="Rectangle" fill="#333333" x="720" y="-6" width="748" height="1210"></rect>
+            <g id="Icons-/-Close-Copy-3" transform="translate(829.000000, 401.000000)" fill="#FFFFFF" fill-rule="nonzero" stroke="#FFFFFF">
+                <path d="M8.26567401,7.68043205 L2.24127091,13.6105207 C1.8580461,13.9879408 1.23671277,13.9879408 0.853674007,13.6105207 C0.47060424,13.2334364 0.47060424,12.6218419 0.853674007,12.2447882 L6.18434067,6.99756577 L0.853829046,1.75052653 C0.470759278,1.37328961 0.470759278,0.761756177 0.853829046,0.384671875 C1.23689881,0.0074349564 1.85820114,0.0074349564 2.24142594,0.384671875 L8.26582905,6.31485211 C8.45736393,6.50348583 8.55302284,6.75044949 8.55302284,6.99753525 C8.55302284,7.2447431 8.45717788,7.4918899 8.26567401,7.68043205 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

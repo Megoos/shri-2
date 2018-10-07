@@ -1,0 +1,49 @@
+.info-item-button-container {
+    display: flex;
+    flex-direction: row;
+    margin-top: 25px;
+    flex-shrink: 0;
+
+    @include tablets {
+        height: 44px;
+    }
+}
+
+.info-item-button {
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #000000;
+    background: #e5e5e5;
+    width: 132px;
+    height: 54px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 18px;
+
+    &:hover,
+    &:active {
+        background: $yellow;
+    }
+
+    @include tablets {
+        height: 44px;
+    }
+}
+
+.info-item-button-cross {
+    display: none;
+    position: absolute;
+    right: 14px;
+    top: 12px;
+
+    @include tablets {
+        display: none;
+    }
+}
+
+.info-item-button-cross {
+    height: 14px;
+    width: 14px;
+}

@@ -1,0 +1,168 @@
+.header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #F0F0F0;
+    background: $white;
+    height: 80px;
+    padding: 0 20px;
+    @include phones {
+        justify-content: space-between;
+        height: 60px;
+        border-bottom: none;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+      }
+}
+
+.logo__img {
+    max-height: 35px;
+    position: relative;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    @include phones {
+        display: none;
+      }
+}
+
+.nav__link {
+    color: $main;
+    font-size: 16px;
+    font-weight: 700;
+    opacity: 0.6;
+    margin-left: 20px;
+    transition: opacity .15s ease-out;
+    &:hover {
+          opacity: 1;
+      }
+
+    &.active {
+        opacity: 1;
+    }
+  }
+
+
+.hamburger-menu-link {
+	vertical-align: middle;
+	position: relative;
+	height: 15px;
+	align-items: center;
+	display: none;
+
+	@include phones {
+        display: flex;
+	}
+}
+
+.hamburger-menu-link__bars {
+	&, &:before, &:after {
+		background: $main;
+		width: 20px;
+		height: 3px;
+		border-radius: 3px;
+	}
+
+	&:before, &:after {
+		content: '';
+		display: block;
+		position: absolute;
+	}
+
+	&:before {
+		top: 0;
+	}
+
+	&:after {
+		bottom: 0;
+	}
+}
+
+/////
+.close {
+    position: absolute;
+    right: 22px;
+    top: 18px;
+    width: 25px;
+    height: 25px;
+    }
+    
+    .close:before, .close:after {
+    position: absolute;
+    left: 15px;
+    content: '';
+    height: 26px;
+    width: 4px;
+    background-color: #fff;
+    border-radius: 3px;
+    }
+    .close:before {
+    transform: rotate(45deg);
+    }
+    .close:after {
+    transform: rotate(-45deg);
+    }
+    
+    .device-wrap {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .device-menu {
+        display: none;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgba($main, .99);
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        z-index: 1;
+    }
+    
+    .device-menu__block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 60px;
+    
+        @include phones {
+            padding-bottom: 0px;
+            padding-top: 45px;
+        }
+    }
+    
+    .device-menu__item {  	
+    
+      &:last-child {
+        &:after {
+          display: none;
+        }
+      }
+    
+      &:after {
+        content: "";
+        display: block;
+        width: 7px;
+        height: 7px;
+        background: #fff;
+        border-radius: 50%;
+        margin: 20px auto;
+      }
+    }
+    
+    .device-menu__link {
+      color: #fff;
+      font-size: 24px;
+      text-transform: uppercase;
+      text-decoration: none;
+      &:active {
+            text-decoration: underline;
+        }
+    }

@@ -1,0 +1,11 @@
+.info-item-interline-container {
+    height: 21px;
+    background-color: $red;
+    transition: background-color .2s ease;
+}
+
+.info-item-interline-line {
+    border-radius: 20px 20px 0 0;  
+    background: $itemColor;
+    height: 100%;
+}

@@ -1,0 +1,18 @@
+.info-item-temperature {
+    display: flex;
+    flex-shrink: 0;
+    margin-top: 20px;
+    font-size: 18px;
+
+    @include tablets {
+        font-size: 14px;
+    }
+}
+
+.info-item-temperature__desc {
+    flex: 1;
+
+    span {
+        font-weight: 700;
+    }
+}

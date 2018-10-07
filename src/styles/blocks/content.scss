@@ -1,0 +1,118 @@
+.content {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    // grid-auto-rows: minmax(min-content, 1fr);
+    grid-gap: 20px;
+    padding: 50px;
+    padding-bottom: 25px;
+    flex: 1;
+
+    @include tablets {
+        padding: 20px 25px 25px;
+    }
+
+    @include phones {
+        padding: 5px 25px 25px;
+    }
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $main;
+    grid-column: span 6;
+    padding-bottom: 10px;
+
+    @include tablets {
+        padding-bottom: 0;
+    }
+}
+
+.info-item {
+    background: $itemColor;
+    border-radius: 20px;
+    overflow: hidden;
+    color: $main;
+    font-size: 150%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: background-color 0.2s ease;
+
+    div:last-child {
+        margin-bottom: 0;
+    }
+
+    &__s {
+        grid-column: span 2;
+
+        .info-item-metadata {
+            flex-direction: column;
+
+            @include tablets {
+                flex-direction: row;
+            }
+        }
+
+        @include tablets {
+            grid-column: span 6;
+        }
+    }
+
+    &__m {
+        grid-column: span 3;
+
+        @include tablets {
+            grid-column: span 6;
+        }
+    }
+
+    &__l {
+        grid-column: span 6;
+        grid-row: auto / span 3;
+
+        .info-item__description {
+            font-size: 24px;
+
+            @include tablets {
+                font-size: 18px;
+            }
+        }
+
+        @include tablets {
+            grid-column: span 6;
+        }
+    }
+
+    &:hover,
+    &:active {
+        .info-item-main-part:not(.critical),
+        .info-item-add-info,
+        .info-item-interline-line {
+            background: itemActiveColor;
+        }
+
+        box-shadow: 0 2px 6px 0 rgba(197, 186, 186, 0.5);
+        border-radius: 20px;
+        cursor: pointer;
+
+        .info-item-button-cross {
+            display: block;
+
+            @include tablets {
+                display: none;
+            }
+        }
+    }
+}
+
+.info-item-add-info {
+    background: $itemColor;
+    padding: 20px;
+    padding-top: 0px;
+    display: flex;
+    flex-direction: column;
+    flex: 1000;
+    justify-content: space-between;
+    transition: background-color 0.2s ease;
+}

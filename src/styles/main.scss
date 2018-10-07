@@ -1,0 +1,19 @@
+//colors
+$main: #333333;
+$grey: #858585;
+$white: #ffffff;
+$yellow: #ffd93e;
+$red: #db5341;
+
+$itemColor: #fafafa;
+$itemActiveColor: #f3f3f3;
+
+//device resolutions
+$laptop: 1140px;
+$tablets: 768px;
+$phones: 540px;
+
+//import
+@import 'layout/mixins';
+@import 'layout/setup';
+@import 'blocks/**/*';
