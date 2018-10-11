@@ -15,10 +15,12 @@ var currentLeft = 0;
 var currentBottom = 0;
 var currentBrightness = 100;
 var prevRotate = -1;
+var action = 'none';
 
 function pointerup_handler(ev) {
     // console.log(ev.type, ev);
     remove_event(ev);
+    action = 'none';
     startMoveX = -1;
     startMoveY = -1;
 }
@@ -113,9 +115,9 @@ function pointermove_handler(ev) {
             ((Math.atan2(
                 evCache[0].clientY - evCache[1].clientY,
                 evCache[0].clientX - evCache[1].clientX
-            ) * 180) / Math.PI) * 0.01;
+            ) * 180) / Math.PI) * 0.02;
 
-        if (prevDiff > 0.06) {
+        if (action !== 'rotate' && prevDiff > 0.04 || action === 'zoom') {
             if (curDiff > prevDiff) {
                 // Приближение
                 zoom = scale(curDiff + zoom);
@@ -130,10 +132,11 @@ function pointermove_handler(ev) {
                 el.style.left = currentLeft + 'px';
                 el.style.bottom = currentBottom + 'px';
             }
+            action = 'zoom';
             document.getElementById('zoom').textContent = `1 : ${zoom.toFixed(2)}`;
         }
         // Поворот
-        else if (prevRotate > 1.1) {
+        else if (prevRotate > 2 || action === 'rotate') {
             if (curRotate > prevRotate) {
                 currentBrightness = brightness(curRotate + currentBrightness);
             }
@@ -143,6 +146,7 @@ function pointermove_handler(ev) {
             }
 
             el.style.filter = `brightness(${currentBrightness.toFixed(0)}%)`;
+            action = 'rotate';
             document.getElementById('brightness').textContent = currentBrightness.toFixed(0) + '%';
         }
 
@@ -152,12 +156,14 @@ function pointermove_handler(ev) {
     } else {
         // Движение вверх / вниз / влево / вправо
         if (startMoveX > 0 || startMoveY > 0) {
-            const diffMoveX = (ev.clientX - startMoveX) * 0.08;
-            const diffMoveY = (startMoveY - ev.clientY) * 0.08;
+            const diffMoveX = (ev.clientX - startMoveX)
+            const diffMoveY = (startMoveY - ev.clientY);
             currentLeft = positionX(currentLeft + diffMoveX);
             currentBottom = positionY(currentBottom + diffMoveY);
             el.style.left = currentLeft + 'px';
             el.style.bottom = currentBottom + 'px';
+            startMoveX = ev.clientX;
+            startMoveY = ev.clientY;
         }
     }
 }
@@ -174,13 +180,13 @@ function init() {
     elHeight = el.offsetHeight / 2;
     elWidth = el.offsetWidth / 2;
 
-    el.onpointerdown = pointerdown_handler;
-    el.onpointermove = pointermove_handler;
+    el.addEventListener('pointerdown', pointerdown_handler);
+    el.addEventListener('pointermove', pointermove_handler);
 
-    el.onpointerup = pointerup_handler;
-    el.onpointercancel = pointerup_handler;
-    el.onpointerout = pointerup_handler;
-    el.onpointerleave = pointerup_handler;
+    el.addEventListener('pointerup', pointerup_handler);
+    el.addEventListener('pointercancel', pointerup_handler);
+    el.addEventListener('pointerout', pointerup_handler);
+    el.addEventListener('pointerleave', pointerup_handler);
 }
 
 window.onload = function() {

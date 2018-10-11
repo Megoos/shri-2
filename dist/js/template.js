@@ -47,7 +47,9 @@ const createImg = (src, srcset = '') => {
             sizes: '(min-width: 1140px) 336px, (min-width: 768px) 224px, 112px',
             src: src,
             srcset: srcset,
-            id: 'camImage'
+            id: 'camImage',
+            'touch-action': 'none',
+            draggable: 'false'
         })
     );
 

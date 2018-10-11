@@ -6,6 +6,8 @@
     flex-grow: 1;
     border-radius: 20px;
     margin-top: 25px;
+    touch-action: none;
+    user-select: none;  
 }
 
 .info-item__img {
