@@ -38,6 +38,21 @@ const createInterline = () => {
     );
 };
 
+const createGraph = (src, srcset = '') => {
+    const div = create(
+        'div',
+        { class: 'info-item__img-container' },
+        create('img', {
+            class: 'info-item__img',
+            sizes: '(min-width: 1140px) 336px, (min-width: 768px) 224px, 112px',
+            src: src,
+            srcset: srcset,
+        })
+    );
+
+    return div;
+};
+
 const createImg = (src, srcset = '') => {
     const div = create(
         'div',
@@ -209,7 +224,7 @@ data.events.forEach(item => {
 
     if (item.data && item.data.type === 'graph') {
         // TODO: отрисовывать график
-        addInfo.appendChild(createImg('./img/Richdata.svg'));
+        addInfo.appendChild(createGraph('./img/Richdata.svg'));
     }
 
     if (item.data && item.data.image && item.icon === 'cam') {

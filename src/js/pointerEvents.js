@@ -112,12 +112,12 @@ function pointermove_handler(ev) {
         
         // Вычисление угла между касаниями
         var curRotate =
-            ((Math.atan2(
+            Math.abs(((Math.atan2(
                 evCache[0].clientY - evCache[1].clientY,
                 evCache[0].clientX - evCache[1].clientX
-            ) * 180) / Math.PI) * 0.02;
+            ) * 180) / Math.PI) * 0.02);
 
-        if (action !== 'rotate' && prevDiff > 0.04 || action === 'zoom') {
+        if (curDiff * 2.8 > curRotate && action !== 'rotate' || action === 'zoom') {
             if (curDiff > prevDiff) {
                 // Приближение
                 zoom = scale(curDiff + zoom);
@@ -136,7 +136,7 @@ function pointermove_handler(ev) {
             document.getElementById('zoom').textContent = `1 : ${zoom.toFixed(2)}`;
         }
         // Поворот
-        else if (prevRotate > 2 || action === 'rotate') {
+        else if (prevRotate > 1.9 || action === 'rotate') {
             if (curRotate > prevRotate) {
                 currentBrightness = brightness(curRotate + currentBrightness);
             }
