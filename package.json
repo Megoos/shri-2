@@ -1,23 +1,25 @@
 {
   "name": "task-2",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "gulpfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Mikhail Guskov",
   "license": "ISC",
   "devDependencies": {
-    "browser-sync": "^2.18.8",
+    "browser-sync": "^2.26.0",
     "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^3.1.1",
-    "gulp-csso": "^2.0.0",
-    "gulp-htmlmin": "^4.0.0",
-    "gulp-plumber": "^1.1.0",
-    "gulp-sass": "^3.1.0",
-    "gulp-sass-glob": "^1.0.6",
-    "gulp-sourcemaps": "^1.6.0"
-  }
+    "gulp-autoprefixer": "^6.0.0",
+    "gulp-csso": "^3.0.1",
+    "gulp-htmlmin": "^5.0.1",
+    "gulp-plumber": "^1.2.0",
+    "gulp-sass": "^4.0.1",
+    "gulp-sass-glob": "^1.0.9",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify-es": "^1.0.4"
+  },
+  "dependencies": {}
 }

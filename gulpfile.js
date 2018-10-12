@@ -9,6 +9,8 @@ const gulp = require('gulp'),
   csso = require('gulp-csso'),
   autoprefixer = require('gulp-autoprefixer'),
   htmlmin = require('gulp-htmlmin');
+  uglifyJS = require('gulp-uglify-es').default;
+
 
 // server
 gulp.task('server', function() {
@@ -31,7 +33,8 @@ gulp.task('sass', () => {
     .pipe(
       autoprefixer({
         browsers: ['last 2 version'],
-        cascade: false
+        cascade: false,
+        remove: false
       })
     )
     .pipe(csso())
@@ -42,7 +45,7 @@ gulp.task('sass', () => {
 
 gulp.task('html', () => {
   gulp
-    .src('src/index.html')
+    .src('src/*.html')
     .pipe(htmlmin({
       collapseWhitespace: true,
       removeComments: true
@@ -54,6 +57,7 @@ gulp.task('html', () => {
 gulp.task('js', () => {
   gulp
     .src('src/js/*.js')
+    .pipe(uglifyJS())
     .pipe(gulp.dest('./dist/js'))
     .pipe(reload({ stream: true }));
 });
