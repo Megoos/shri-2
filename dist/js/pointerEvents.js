@@ -1,175 +1,173 @@
-const maxZoom = 4;
 
-var evCache = new Array();
-var prevDiff = -1;
-var startMoveX = -1;
-var startMoveY = -1;
-
-var el;
-var zoom = 1.5;
-
-var elWidth = 0;
-var elHeight = 0;
-
-var currentLeft = 0;
-var currentBottom = 0;
-var currentBrightness = 100;
-var prevRotate = -1;
-var action = 'none';
-
-function pointerup_handler(ev) {
-    // console.log(ev.type, ev);
-    remove_event(ev);
-    action = 'none';
-    startMoveX = -1;
-    startMoveY = -1;
-}
-
-function remove_event(ev) {
-    // Удаление текущего эвента из массива
-    for (var i = 0; i < evCache.length; i++) {
-        if (evCache[i].pointerId == ev.pointerId) {
-            evCache.splice(i, 1);
-            break;
+var pointerEvent = (function() {
+    const _scale = function(scale, maxZoom) {
+        if (scale > maxZoom) {
+            return maxZoom;
         }
-    }
-}
-
-function pointerdown_handler(ev) {
-    // Добавление эвента в массив событий
-    //console.log('pointerDown', ev);
-    evCache.push(ev);
-    startMoveX = ev.clientX;
-    startMoveY = ev.clientY;
-}
-
-function scale(scale) {
-    if (scale > maxZoom) {
-        return maxZoom;
-    }
-
-    if (scale < 1) {
-        return 1;
-    }
-
-    return scale;
-}
-
-function positionX(x) {
-    if (x > elWidth * zoom - elWidth) {
-        return elWidth * zoom - elWidth;
-    }
-
-    if (x < elWidth - elWidth * zoom) {
-        return elWidth - elWidth * zoom;
-    }
-
-    return x;
-}
-
-function positionY(y) {
-    if (y > elHeight * zoom - elHeight) {
-        return elHeight * zoom - elHeight;
-    }
-
-    if (y < elHeight - elHeight * zoom) {
-        return elHeight - elHeight * zoom;
-    }
-
-    return y;
-}
-
-function brightness(value) {
-    if (value > 200) {
-        return 200;
-    }
-
-    if (value < 0) {
-        return 0;
-    }
-
-    return value;
-}
-
-function pointermove_handler(ev) {
-    //console.log('pointerMove', ev);
-    // Поиск текущего эвента в массиве событий
-    for (var i = 0; i < evCache.length; i++) {
-        if (ev.pointerId == evCache[i].pointerId) {
-            evCache[i] = ev;
-            break;
+    
+        if (scale < 1) {
+            return 1;
         }
+    
+        return scale;
     }
 
-    // Если два касания
-    if (evCache.length == 2) {
-        // Вычисление дистанции между касаниями
-        var curDiff =
-            Math.sqrt(
-                Math.pow(evCache[0].clientX - evCache[1].clientX, 2) +
-                    Math.pow(evCache[0].clientY - evCache[1].clientY, 2)
-            ) / 3000;
+    const _position = function(x, el, zoom) {
+        if (x > el * zoom - el) {
+            return el * zoom - el;
+        }
+    
+        if (x <el - el * zoom) {
+            return el - el * zoom;
+        }
+    
+        return x;
+    }
+
+    const _brightness = function(value) {
+        if (value > 200) {
+            return 200;
+        }
+    
+        if (value < 0) {
+            return 0;
+        }
+    
+        return value;
+    }
+
+    const _remove_event = function(ev, evCache) {
+        // Удаление текущего эвента из массива
+        for (var i = 0; i < evCache.length; i++) {
+            if (evCache[i].pointerId == ev.pointerId) {
+                evCache.splice(i, 1);
+                break;
+            }
+        }
+
+        return evCache;
+    }
+
+    class pointerEvent {
+        constructor(el, width, height) {
+            this.maxZoom = 4;
+            this.evCache = [];
+            this.prevDiff = -1;
+            this.startMoveX = -1;
+            this.startMoveY = -1;
+            this.el = el;
+            this.zoom = 1.5;
+    
+            this.elWidth = width;
+            this.elHeight = height;
+    
+            this.currentLeft = 0;
+            this.currentBottom = 0;
+            this.currentBrightness = 100;
+            this.prevRotate = -1;
+            this.action = 'none';
+        }
+
+        pointerup_handler(ev) {
+            // console.log(ev.type, ev);
+            this.evCache = _remove_event(ev, this.evCache);
+            this.action = 'none';
+            this.startMoveX = -1;
+            this.startMoveY = -1;
+        }
+
+        pointerdown_handler(ev) {
+            // Добавление эвента в массив событий
+            //console.log('pointerDown', ev);
+            this.evCache.push(ev);
+            this.startMoveX = ev.clientX;
+            this.startMoveY = ev.clientY;
+        }
+
+        pointermove_handler(ev) {
+            //console.log('pointerMove', ev);
+            // Поиск текущего эвента в массиве событий
+            for (var i = 0; i < this.evCache.length; i++) {
+                if (ev.pointerId == this.evCache[i].pointerId) {
+                    this.evCache[i] = ev;
+                    break;
+                }
+            }
         
-        // Вычисление угла между касаниями
-        var curRotate =
-            Math.abs(((Math.atan2(
-                evCache[0].clientY - evCache[1].clientY,
-                evCache[0].clientX - evCache[1].clientX
-            ) * 180) / Math.PI) * 0.02);
-
-        if (curDiff * 2.8 > curRotate && action !== 'rotate' || action === 'zoom') {
-            if (curDiff > prevDiff) {
-                // Приближение
-                zoom = scale(curDiff + zoom);
-                el.style.transform = `scale(${zoom})`;
+            // Если два касания
+            if (this.evCache.length == 2) {
+                // Вычисление дистанции между касаниями
+                var curDiff =
+                    Math.sqrt(
+                        Math.pow(this.evCache[0].clientX - this.evCache[1].clientX, 2) +
+                            Math.pow(this.evCache[0].clientY - this.evCache[1].clientY, 2)
+                    ) / 3000;
+                
+                // Вычисление угла между касаниями
+                var curRotate =
+                    Math.abs(((Math.atan2(
+                        this.evCache[0].clientY - this.evCache[1].clientY,
+                        this.evCache[0].clientX - this.evCache[1].clientX
+                    ) * 180) / Math.PI) * 0.02);
+        
+                if (curDiff * 2.85 > curRotate && this.action !== 'rotate' || this.action === 'zoom') {
+                    if (curDiff > this.prevDiff) {
+                        // Приближение
+                        this.zoom = _scale(curDiff + this.zoom, this.maxZoom);
+                        this.el.style.transform = `scale(${this.zoom})`;
+                    }
+                    if (curDiff < this.prevDiff) {
+                        // Отдаление
+                        this.zoom = _scale(this.zoom - curDiff, this.maxZoom);
+                        this.el.style.transform = `scale(${this.zoom})`;
+                        this.currentLeft = _position(this.currentLeft, this.elWidth, this.zoom);
+                        this.currentBottom = _position(this.currentBottom, this.elHeight, this.zoom);
+                        this.el.style.left = this.currentLeft + 'px';
+                        this.el.style.bottom = this.currentBottom + 'px';
+                    }
+                    this.action = 'zoom';
+                    document.getElementById('zoom').textContent = `1 : ${this.zoom.toFixed(2)}`;
+                }
+                // Поворот
+                else if (this.prevRotate > 1.9 || this.action === 'rotate') {
+                    if (curRotate > this.prevRotate) {
+                        this.currentBrightness = _brightness(curRotate + this.currentBrightness);
+                    }
+        
+                    if (curRotate < this.prevRotate) {
+                        this.currentBrightness = _brightness(this.currentBrightness - curRotate);
+                    }
+        
+                    this.el.style.filter = `brightness(${this.currentBrightness.toFixed(0)}%)`;
+                    this.action = 'rotate';
+                    document.getElementById('brightness').textContent = this.currentBrightness.toFixed(0) + '%';
+                }
+        
+                this.prevRotate = curRotate;
+                this.prevDiff = curDiff;
+        
+            } else {
+                // Движение вверх / вниз / влево / вправо
+                if (this.startMoveX > 0 || this.startMoveY > 0) {
+                    const diffMoveX = (ev.clientX - this.startMoveX)
+                    const diffMoveY = (this.startMoveY - ev.clientY);
+                    this.currentLeft = _position(this.currentLeft + diffMoveX, this.elWidth, this.zoom);
+                    this.currentBottom = _position(this.currentBottom + diffMoveY, this.elHeight, this.zoom);
+                    this.el.style.left = this.currentLeft + 'px';
+                    this.el.style.bottom = this.currentBottom + 'px';
+                    this.startMoveX = ev.clientX;
+                    this.startMoveY = ev.clientY;
+                }
             }
-            if (curDiff < prevDiff) {
-                // Отдаление
-                zoom = scale(zoom - curDiff);
-                el.style.transform = `scale(${zoom})`;
-                currentLeft = positionX(currentLeft);
-                currentBottom = positionY(currentBottom);
-                el.style.left = currentLeft + 'px';
-                el.style.bottom = currentBottom + 'px';
-            }
-            action = 'zoom';
-            document.getElementById('zoom').textContent = `1 : ${zoom.toFixed(2)}`;
-        }
-        // Поворот
-        else if (prevRotate > 1.9 || action === 'rotate') {
-            if (curRotate > prevRotate) {
-                currentBrightness = brightness(curRotate + currentBrightness);
-            }
-
-            if (curRotate < prevRotate) {
-                currentBrightness = brightness(currentBrightness - curRotate);
-            }
-
-            el.style.filter = `brightness(${currentBrightness.toFixed(0)}%)`;
-            action = 'rotate';
-            document.getElementById('brightness').textContent = currentBrightness.toFixed(0) + '%';
-        }
-
-        prevRotate = curRotate;
-        prevDiff = curDiff;
-
-    } else {
-        // Движение вверх / вниз / влево / вправо
-        if (startMoveX > 0 || startMoveY > 0) {
-            const diffMoveX = (ev.clientX - startMoveX)
-            const diffMoveY = (startMoveY - ev.clientY);
-            currentLeft = positionX(currentLeft + diffMoveX);
-            currentBottom = positionY(currentBottom + diffMoveY);
-            el.style.left = currentLeft + 'px';
-            el.style.bottom = currentBottom + 'px';
-            startMoveX = ev.clientX;
-            startMoveY = ev.clientY;
         }
     }
-}
+  
+    return pointerEvent;
+  })();
 
+// TODO: Work with multiple items
 function init() {
-    el = document.getElementById('camImage');
+    var el = document.getElementById('camImage');
 
     el.oncontextmenu = function(event) {
         event.preventDefault();
@@ -177,16 +175,15 @@ function init() {
         return false;
     };
 
-    elHeight = el.offsetHeight / 2;
-    elWidth = el.offsetWidth / 2;
+    var item = new pointerEvent(el, el.offsetWidth / 2, el.offsetHeight / 2)
 
-    el.addEventListener('pointerdown', pointerdown_handler);
-    el.addEventListener('pointermove', pointermove_handler);
+    el.addEventListener('pointerdown', (ev) => item.pointerdown_handler(ev));
+    el.addEventListener('pointermove', (ev) => item.pointermove_handler(ev));
 
-    el.addEventListener('pointerup', pointerup_handler);
-    el.addEventListener('pointercancel', pointerup_handler);
-    el.addEventListener('pointerout', pointerup_handler);
-    el.addEventListener('pointerleave', pointerup_handler);
+    el.addEventListener('pointerup', (ev) => item.pointerup_handler(ev));
+    el.addEventListener('pointercancel', (ev) => item.pointerup_handler(ev));
+    el.addEventListener('pointerout', (ev) => item.pointerup_handler(ev));
+    el.addEventListener('pointerleave', (ev) => item.pointerup_handler(ev));
 }
 
 window.onload = function() {
