@@ -1,6 +1,6 @@
 const express = require('express');
 const fs = require('fs');
-const path = require('path')
+const path = require('path');
 const app = express();
 const dateDiff = require('./utils/dateDiff');
 
@@ -13,11 +13,11 @@ app.get('/status', (request, response) => {
     response.send(dateDiff(startTime, new Date()));
 });
 
-app.get('/api/events', (request, response) => {
-    fs.readFile(path.join(__dirname, _path) , 'utf-8', (err, data) => {
+app.get('/api/events', (request, response, next) => {
+    fs.readFile(path.join(__dirname, _path), 'utf-8', (err, data) => {
         try {
             if (err) {
-                throw err.message;
+                throw err;
             }
 
             var result = JSON.parse(data).events;
@@ -39,7 +39,7 @@ app.get('/api/events', (request, response) => {
 
             response.json({ events: result });
         } catch (e) {
-            response.status(500).send(e);
+            next(e);
         }
     });
 });
@@ -49,7 +49,7 @@ app.get('*', (request, response) => {
 });
 
 app.use((err, request, response, next) => {
-    response.status(500).send('Error:', err);
+    response.status(500).send(err.message);
 });
 
 app.listen(port, err => {
