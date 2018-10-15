@@ -2,7 +2,7 @@ var videos = document.querySelectorAll('.video');
 var inputs = document.querySelectorAll('.video-range__input');
 var muteButtons = document.querySelectorAll('.mute-button');
 
-//изменение яркости и контрастности
+// изменение яркости и контрастности
 inputs.forEach(input => {
     input.oninput = function() {
         const { videoNum, type } = this.dataset;
@@ -14,7 +14,6 @@ inputs.forEach(input => {
         video.style.filter = `brightness(${brightness}%) contrast(${contrast}%)`;
     };
 });
-
 // анализатор звука
 function analyserInit(video) {
     const context = new (window.AudioContext || window.webkitAudioContext)();

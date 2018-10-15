@@ -4,7 +4,7 @@ const container = document.querySelector('.content');
 // общая функция для генерации компонентов
 function create(name, attributes) {
     var el = document.createElement(name);
-    if (typeof attributes == 'object') {
+    if (typeof attributes === 'object') {
         for (var i in attributes) {
             el.setAttribute(i, attributes[i]);
 
@@ -17,7 +17,7 @@ function create(name, attributes) {
     }
     for (var i = 2; i < arguments.length; i++) {
         var val = arguments[i];
-        if (typeof val == 'string') {
+        if (typeof val === 'string') {
             val = document.createTextNode(val);
         }
         el.appendChild(val);
@@ -46,7 +46,7 @@ const createGraph = (src, srcset = '') => {
             class: 'info-item__img',
             sizes: '(min-width: 1140px) 336px, (min-width: 768px) 224px, 112px',
             src: src,
-            srcset: srcset,
+            srcset: srcset
         })
     );
 

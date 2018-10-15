@@ -4,37 +4,37 @@ var pointerEvent = (function() {
         if (scale > maxZoom) {
             return maxZoom;
         }
-    
+
         if (scale < 1) {
             return 1;
         }
-    
+
         return scale;
-    }
+    };
 
     const _position = function(x, el, zoom) {
         if (x > el * zoom - el) {
             return el * zoom - el;
         }
-    
-        if (x <el - el * zoom) {
+
+        if (x < el - el * zoom) {
             return el - el * zoom;
         }
-    
+
         return x;
-    }
+    };
 
     const _brightness = function(value) {
         if (value > 200) {
             return 200;
         }
-    
+
         if (value < 0) {
             return 0;
         }
-    
+
         return value;
-    }
+    };
 
     const _remove_event = function(ev, evCache) {
         // Удаление текущего эвента из массива
@@ -46,7 +46,7 @@ var pointerEvent = (function() {
         }
 
         return evCache;
-    }
+    };
 
     class pointerEvent {
         constructor(el, width, height) {
@@ -57,10 +57,10 @@ var pointerEvent = (function() {
             this.startMoveY = -1;
             this.el = el;
             this.zoom = 1.5;
-    
+
             this.elWidth = width;
             this.elHeight = height;
-    
+
             this.currentLeft = 0;
             this.currentBottom = 0;
             this.currentBrightness = 100;
@@ -78,14 +78,14 @@ var pointerEvent = (function() {
 
         pointerdown_handler(ev) {
             // Добавление эвента в массив событий
-            //console.log('pointerDown', ev);
+            // console.log('pointerDown', ev);
             this.evCache.push(ev);
             this.startMoveX = ev.clientX;
             this.startMoveY = ev.clientY;
         }
 
         pointermove_handler(ev) {
-            //console.log('pointerMove', ev);
+            // console.log('pointerMove', ev);
             // Поиск текущего эвента в массиве событий
             for (var i = 0; i < this.evCache.length; i++) {
                 if (ev.pointerId == this.evCache[i].pointerId) {
@@ -93,7 +93,7 @@ var pointerEvent = (function() {
                     break;
                 }
             }
-        
+
             // Если два касания
             if (this.evCache.length == 2) {
                 // Вычисление дистанции между касаниями
@@ -102,14 +102,14 @@ var pointerEvent = (function() {
                         Math.pow(this.evCache[0].clientX - this.evCache[1].clientX, 2) +
                             Math.pow(this.evCache[0].clientY - this.evCache[1].clientY, 2)
                     ) / 3000;
-                
+
                 // Вычисление угла между касаниями
                 var curRotate =
                     Math.abs(((Math.atan2(
                         this.evCache[0].clientY - this.evCache[1].clientY,
                         this.evCache[0].clientX - this.evCache[1].clientX
                     ) * 180) / Math.PI) * 0.02);
-        
+
                 if (curDiff * 2.85 > curRotate && this.action !== 'rotate' || this.action === 'zoom') {
                     if (curDiff > this.prevDiff) {
                         // Приближение
@@ -133,23 +133,22 @@ var pointerEvent = (function() {
                     if (curRotate > this.prevRotate) {
                         this.currentBrightness = _brightness(curRotate + this.currentBrightness);
                     }
-        
+
                     if (curRotate < this.prevRotate) {
                         this.currentBrightness = _brightness(this.currentBrightness - curRotate);
                     }
-        
+
                     this.el.style.filter = `brightness(${this.currentBrightness.toFixed(0)}%)`;
                     this.action = 'rotate';
                     document.getElementById('brightness').textContent = this.currentBrightness.toFixed(0) + '%';
                 }
-        
+
                 this.prevRotate = curRotate;
                 this.prevDiff = curDiff;
-        
             } else {
                 // Движение вверх / вниз / влево / вправо
                 if (this.startMoveX > 0 || this.startMoveY > 0) {
-                    const diffMoveX = (ev.clientX - this.startMoveX)
+                    const diffMoveX = (ev.clientX - this.startMoveX);
                     const diffMoveY = (this.startMoveY - ev.clientY);
                     this.currentLeft = _position(this.currentLeft + diffMoveX, this.elWidth, this.zoom);
                     this.currentBottom = _position(this.currentBottom + diffMoveY, this.elHeight, this.zoom);
@@ -161,9 +160,9 @@ var pointerEvent = (function() {
             }
         }
     }
-  
+
     return pointerEvent;
-  })();
+})();
 
 // TODO: Work with multiple items
 function init() {
@@ -175,7 +174,7 @@ function init() {
         return false;
     };
 
-    var item = new pointerEvent(el, el.offsetWidth / 2, el.offsetHeight / 2)
+    var item = new pointerEvent(el, el.offsetWidth / 2, el.offsetHeight / 2);
 
     el.addEventListener('pointerdown', (ev) => item.pointerdown_handler(ev));
     el.addEventListener('pointermove', (ev) => item.pointermove_handler(ev));

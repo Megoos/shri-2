@@ -1,4 +1,4 @@
-//открытие меню в мобильной версии
+// открытие меню в мобильной версии
 const hamburger = document.querySelectorAll('.hamburger-menu-link');
 const close = document.querySelectorAll('.close');
 const menu = document.querySelectorAll('.device-menu');

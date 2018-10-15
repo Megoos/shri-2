@@ -7,15 +7,15 @@ function cropTextToFit(o) {
     var lastIndex;
     var txt = o.innerHTML;
     if (!o.title) {
-      o.title = txt;
+        o.title = txt;
     } else {
-      o.innerHTML = o.title;
-      txt = o.title;
-    }    
+        o.innerHTML = o.title;
+        txt = o.title;
+    }
 
     while (o.scrollHeight > o.clientHeight) {
         lastIndex = txt.lastIndexOf(' ');
-        if (lastIndex == -1) return;
+        if (lastIndex === -1) return;
         txt = txt.substring(0, lastIndex);
         o.innerHTML = txt + '…';
     }
