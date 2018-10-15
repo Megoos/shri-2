@@ -56,7 +56,7 @@ gulp.task('html', () => {
 
 gulp.task('js', () => {
   gulp
-    .src('src/js/*.js')
+    .src('src/js/**/*.js')
     .pipe(uglifyJS())
     .pipe(gulp.dest('./dist/js'))
     .pipe(reload({ stream: true }));
