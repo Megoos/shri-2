@@ -14,7 +14,7 @@ gulp
 
 3. Анализатор звука сделан при помощи web audio api используя AnalyserNode, отрисовка шкалы звука реализована на canvas.
 
-Репозиторий с исходными видео не менялся, запускался так же как указано в задании.
+Репозиторий с исходными видео не менялся, запускался так же как указано в задании. https://github.com/mad-gooze/shri-2018-2-multimedia-homework/tree/master/streams
 
 Собранный проект находится в папке `dist`.
 Ссылка на страницу: https://megoos.github.io/shri-2/dist/video.html
