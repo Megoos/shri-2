@@ -2,7 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const app = express();
-const {promisify} = require('util')
+const { promisify } = require('util');
 const readFileAsync = promisify(fs.readFile);
 const dateDiff = require('./utils/dateDiff');
 
@@ -15,12 +15,12 @@ app.get('/status', (request, response) => {
 });
 
 app.get('/api/events', (request, response, next) => {
-    readFileAsync(path.join(__dirname, _path), {encoding: 'utf8'})
-        .then((data) => {
+    readFileAsync(path.join(__dirname, _path), { encoding: 'utf8' })
+        .then(data => {
             let result = JSON.parse(data).events;
 
             //Если в запросе переданы параметры
-            if (request.query.type) {
+            if (typeof request.query.type !== 'undefined') {
                 const queryTypes = request.query.type.split(':');
 
                 //проверка соответсвуют ли переданные параметры доступным
@@ -35,13 +35,16 @@ app.get('/api/events', (request, response, next) => {
 
             response.json({ events: result });
         })
-        .catch((err) => {
+        .catch(err => {
             next(err);
         });
 });
 
 app.use((request, response) => {
-    response.type('text/html').status(404).send('<h1>Page not found</h1>');
+    response
+        .type('text/html')
+        .status(404)
+        .send('<h1>Page not found</h1>');
 });
 
 app.use((err, request, response) => {
