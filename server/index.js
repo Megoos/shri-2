@@ -20,7 +20,7 @@ app.get('/api/events', (request, response, next) => {
             let result = JSON.parse(data).events;
 
             //Если в запросе переданы параметры
-            if (request.query.type && request.query.type !== '') {
+            if (request.query.type) {
                 const queryTypes = request.query.type.split(':');
 
                 //проверка соответсвуют ли переданные параметры доступным
@@ -40,11 +40,11 @@ app.get('/api/events', (request, response, next) => {
         });
 });
 
-app.use((request, response, next) => {
+app.use((request, response) => {
     response.type('text/html').status(404).send('<h1>Page not found</h1>');
 });
 
-app.use((err, request, response, next) => {
+app.use((err, request, response) => {
     response.status(500).send(err.message);
 });
 
