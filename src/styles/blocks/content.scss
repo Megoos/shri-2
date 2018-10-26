@@ -16,6 +16,11 @@
     }
 }
 
+.fullscreen {
+    
+    overflow: hidden;
+}
+
 .page-title {
     font-size: 2rem;
     font-weight: 700;
@@ -37,7 +42,7 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, transform .3s ease-in-out;
 
     div:last-child {
         margin-bottom: 0;
@@ -89,7 +94,7 @@
         .info-item-main-part:not(.critical),
         .info-item-add-info,
         .info-item-interline-line {
-            background: itemActiveColor;
+            background: $itemActiveColor;
         }
 
         box-shadow: 0 2px 6px 0 rgba(197, 186, 186, 0.5);
@@ -103,6 +108,10 @@
                 display: none;
             }
         }
+    }
+
+    &.active {
+        z-index: 1;
     }
 }
 
