@@ -3,7 +3,7 @@ const container = document.querySelector('.content');
 
 // общая функция для генерации компонентов
 function create(name, attributes) {
-  var el = document.createElement(name);
+  let el = document.createElement(name);
   if (typeof attributes === 'object') {
     for (let i in attributes) {
       el.setAttribute(i, attributes[i]);
@@ -16,7 +16,7 @@ function create(name, attributes) {
     }
   }
   for (let i = 2; i < arguments.length; i++) {
-    var val = arguments[i];
+    let val = arguments[i];
     if (typeof val === 'string') {
       val = document.createTextNode(val);
     }
@@ -187,7 +187,7 @@ const createMusicBlock = (logo, name, time, volume) => {
 
 // Шаблонизация исходных данных
 data.events.forEach(item => {
-  var addInfo;
+  let addInfo;
   const content = t.cloneNode(true).content;
 
   content.querySelector('.info-item').classList.add(`info-item__${item.size}`);

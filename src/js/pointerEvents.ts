@@ -1,5 +1,5 @@
 
-var PointerEvent = (function() {
+let PointerEvent = (function() {
   const _scale = function(scale, maxZoom) {
     if (scale > maxZoom) {
       return maxZoom;
@@ -38,7 +38,7 @@ var PointerEvent = (function() {
 
   const _removeEvent = function(ev, evCache) {
     // Удаление текущего эвента из массива
-    for (var i = 0; i < evCache.length; i++) {
+    for (let i = 0; i < evCache.length; i++) {
       if (evCache[i].pointerId === ev.pointerId) {
         evCache.splice(i, 1);
         break;
@@ -87,7 +87,7 @@ var PointerEvent = (function() {
     pointermoveHandler(ev) {
       // console.log('pointerMove', ev);
       // Поиск текущего эвента в массиве событий
-      for (var i = 0; i < this.evCache.length; i++) {
+      for (let i = 0; i < this.evCache.length; i++) {
         if (ev.pointerId === this.evCache[i].pointerId) {
           this.evCache[i] = ev;
           break;
@@ -97,14 +97,14 @@ var PointerEvent = (function() {
       // Если два касания
       if (this.evCache.length === 2) {
         // Вычисление дистанции между касаниями
-        var curDiff =
+        let curDiff =
                     Math.sqrt(
                       Math.pow(this.evCache[0].clientX - this.evCache[1].clientX, 2) +
                             Math.pow(this.evCache[0].clientY - this.evCache[1].clientY, 2)
                     ) / 3000;
 
         // Вычисление угла между касаниями
-        var curRotate =
+        let curRotate =
                     Math.abs(((Math.atan2(
                       this.evCache[0].clientY - this.evCache[1].clientY,
                       this.evCache[0].clientX - this.evCache[1].clientX
@@ -164,7 +164,7 @@ var PointerEvent = (function() {
 
 // TODO: Work with multiple items
 function init() {
-  var el = document.getElementById('camImage');
+  let el = document.getElementById('camImage');
 
   el.oncontextmenu = function(event) {
     event.preventDefault();
@@ -172,7 +172,7 @@ function init() {
     return false;
   };
 
-  var item = new PointerEvent(el, el.offsetWidth / 2, el.offsetHeight / 2);
+  let item = new PointerEvent(el, el.offsetWidth / 2, el.offsetHeight / 2);
 
   el.addEventListener('pointerdown', (ev) => item.pointerdownHandler(ev));
   el.addEventListener('pointermove', (ev) => item.pointermoveHandler(ev));

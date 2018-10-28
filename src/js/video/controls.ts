@@ -1,6 +1,6 @@
-var videos = document.querySelectorAll('.video');
-var inputs = document.querySelectorAll('.video-range__input');
-var muteButtons = document.querySelectorAll('.mute-button');
+let videos = document.querySelectorAll('.video');
+let inputs = document.querySelectorAll('.video-range__input');
+let muteButtons = document.querySelectorAll('.mute-button');
 
 // изменение яркости и контрастности
 inputs.forEach(input => {

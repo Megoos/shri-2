@@ -1,11 +1,11 @@
-var list = document.body.getElementsByClassName('info-item__title');
-for (var i = 0; i < list.length; i++) {
+let list = document.body.getElementsByClassName('info-item__title');
+for (let i = 0; i < list.length; i++) {
   cropTextToFit(list[i]);
 }
 
 function cropTextToFit(o) {
-  var lastIndex;
-  var txt = o.innerHTML;
+  let lastIndex;
+  let txt = o.innerHTML;
   if (!o.title) {
     o.title = txt;
   } else {
@@ -24,8 +24,8 @@ function cropTextToFit(o) {
 window.addEventListener(
   'resize',
   function() {
-    var list = document.body.getElementsByClassName('info-item__title');
-    for (var i = 0; i < list.length; i++) {
+    let list = document.body.getElementsByClassName('info-item__title');
+    for (let i = 0; i < list.length; i++) {
       cropTextToFit(list[i]);
     }
   },
