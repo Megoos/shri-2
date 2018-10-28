@@ -4,11 +4,11 @@ const close = document.querySelectorAll('.close');
 const menu = document.querySelectorAll('.device-menu');
 
 close[0].onclick = function(event) {
-    event.preventDefault();
-    menu[0].style.display = 'none';
+  event.preventDefault();
+  menu[0].style.display = 'none';
 };
 
 hamburger[0].onclick = function(event) {
-    event.preventDefault();
-    menu[0].style.display = 'block';
+  event.preventDefault();
+  menu[0].style.display = 'block';
 };

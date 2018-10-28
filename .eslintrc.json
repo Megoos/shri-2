@@ -3,7 +3,12 @@
     "rules": {
         "no-extra-semi": "error",
         "semi": [2, "always"],
-        "indent": ["error", 4],
+        "indent": ["error", 2],
         "space-before-function-paren": ["error", "never"]
+    },
+    "globals": {
+        "Hls": true,
+        "data": true,
+        "requestAnimationFrame": true
     }
 }

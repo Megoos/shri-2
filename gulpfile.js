@@ -1,16 +1,19 @@
-const gulp = require('gulp'),
-  fs = require('fs'),
-  browserSync = require('browser-sync').create(),
-  reload = browserSync.reload,
-  sass = require('gulp-sass'),
-  plumber = require('gulp-plumber'),
-  sassGlob = require('gulp-sass-glob'),
-  sourcemaps = require('gulp-sourcemaps'),
-  csso = require('gulp-csso'),
-  autoprefixer = require('gulp-autoprefixer'),
-  htmlmin = require('gulp-htmlmin');
-  uglifyJS = require('gulp-uglify-es').default;
+const gulp = require('gulp');
+const fs = require('fs');
+const browserSync = require('browser-sync').create();
+const reload = browserSync.reload;
+const sass = require('gulp-sass');
+const plumber = require('gulp-plumber');
+const sassGlob = require('gulp-sass-glob');
+const sourcemaps = require('gulp-sourcemaps');
+const csso = require('gulp-csso');
+const autoprefixer = require('gulp-autoprefixer');
+const htmlmin = require('gulp-htmlmin');
+const uglifyJS = require('gulp-uglify-es').default;
+const del = require('del');
+const ts = require('gulp-typescript');
 
+const tsProject = ts.createProject('tsconfig.json');
 
 // server
 gulp.task('server', function() {
@@ -46,17 +49,20 @@ gulp.task('sass', () => {
 gulp.task('html', () => {
   gulp
     .src('src/*.html')
-    .pipe(htmlmin({
-      collapseWhitespace: true,
-      removeComments: true
-    }))
+    .pipe(
+      htmlmin({
+        collapseWhitespace: true,
+        removeComments: true
+      })
+    )
     .pipe(gulp.dest('dist'))
     .pipe(reload({ stream: true }));
 });
 
 gulp.task('js', () => {
   gulp
-    .src('src/js/**/*.js')
+    .src('src/js/**/*.ts')
+    .pipe(tsProject())
     .pipe(uglifyJS())
     .pipe(gulp.dest('./dist/js'))
     .pipe(reload({ stream: true }));
@@ -72,13 +78,11 @@ gulp.task('img', () => {
   gulp
     .src('src/img/**/*')
     .pipe(gulp.dest('./dist/img'))
-    .pipe(reload({ stream: true }))
+    .pipe(reload({ stream: true }));
 });
 
 gulp.task('files', () => {
-  gulp
-    .src('src/files/**/*')
-    .pipe(gulp.dest('./dist/files'))
+  gulp.src('src/files/**/*').pipe(gulp.dest('./dist/files'));
 });
 
 gulp.task('clean', () => del(['dist']));
