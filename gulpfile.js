@@ -59,7 +59,7 @@ gulp.task('html', () => {
     .pipe(reload({ stream: true }));
 });
 
-gulp.task('js', () => {
+gulp.task('scripts', () => {
   gulp
     .src('src/js/**/*.ts')
     .pipe(tsProject())
@@ -87,4 +87,4 @@ gulp.task('files', () => {
 
 gulp.task('clean', () => del(['dist']));
 
-gulp.task('default', ['sass', 'html', 'js', 'img', 'files', 'server', 'watch']);
+gulp.task('default', ['sass', 'html', 'scripts', 'img', 'files', 'server', 'watch']);
