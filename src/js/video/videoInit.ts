@@ -1,9 +1,9 @@
-function initVideo(video, url) {
-  if (window.Hls.isSupported()) {
-    let hls = new window.Hls();
+function initVideo(video, url): void {
+  if ((window as any).Hls.isSupported()) {
+    let hls = new (window as any).Hls();
     hls.loadSource(url);
     hls.attachMedia(video);
-    hls.on(window.Hls.Events.MANIFEST_PARSED, function() {
+    hls.on((window as any).Hls.Events.MANIFEST_PARSED, function() {
       video.play();
     });
   } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
