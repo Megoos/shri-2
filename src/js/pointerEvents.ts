@@ -1,5 +1,4 @@
-
-let PointerEvent = (function() {
+let PointerEventTouch = (function() {
   const _scale = function(scale, maxZoom) {
     if (scale > maxZoom) {
       return maxZoom;
@@ -48,7 +47,22 @@ let PointerEvent = (function() {
     return evCache;
   };
 
-  class PointerEvent {
+  class PointerEventTouch {
+    maxZoom: number;
+    evCache: PointerEvent[];
+    prevDiff: number;
+    startMoveX: number;
+    startMoveY: number;
+    el: HTMLImageElement;
+    zoom: number;
+    elWidth: number;
+    elHeight: number;
+    currentLeft: number;
+    currentBottom: number;
+    currentBrightness: number;
+    prevRotate: number;
+    action: string;
+
     constructor(el, width, height) {
       this.maxZoom = 4;
       this.evCache = [];
@@ -98,17 +112,21 @@ let PointerEvent = (function() {
       if (this.evCache.length === 2) {
         // Вычисление дистанции между касаниями
         let curDiff =
-                    Math.sqrt(
-                      Math.pow(this.evCache[0].clientX - this.evCache[1].clientX, 2) +
-                            Math.pow(this.evCache[0].clientY - this.evCache[1].clientY, 2)
-                    ) / 3000;
+          Math.sqrt(
+            Math.pow(this.evCache[0].clientX - this.evCache[1].clientX, 2) +
+              Math.pow(this.evCache[0].clientY - this.evCache[1].clientY, 2)
+          ) / 3000;
 
         // Вычисление угла между касаниями
-        let curRotate =
-                    Math.abs(((Math.atan2(
-                      this.evCache[0].clientY - this.evCache[1].clientY,
-                      this.evCache[0].clientX - this.evCache[1].clientX
-                    ) * 180) / Math.PI) * 0.02);
+        let curRotate = Math.abs(
+          ((Math.atan2(
+            this.evCache[0].clientY - this.evCache[1].clientY,
+            this.evCache[0].clientX - this.evCache[1].clientX
+          ) *
+            180) /
+            Math.PI) *
+            0.02
+        );
 
         if ((curDiff * 2.85 > curRotate && this.action !== 'rotate') || this.action === 'zoom') {
           if (curDiff > this.prevDiff) {
@@ -127,7 +145,8 @@ let PointerEvent = (function() {
           }
           this.action = 'zoom';
           document.getElementById('zoom').textContent = `1 : ${this.zoom.toFixed(2)}`;
-        } else if (this.prevRotate > 1.9 || this.action === 'rotate') { // Поворот
+        } else if (this.prevRotate > 1.9 || this.action === 'rotate') {
+          // Поворот
           if (curRotate > this.prevRotate) {
             this.currentBrightness = _brightness(curRotate + this.currentBrightness);
           }
@@ -138,7 +157,8 @@ let PointerEvent = (function() {
 
           this.el.style.filter = `brightness(${this.currentBrightness.toFixed(0)}%)`;
           this.action = 'rotate';
-          document.getElementById('brightness').textContent = this.currentBrightness.toFixed(0) + '%';
+          document.getElementById('brightness').textContent =
+            this.currentBrightness.toFixed(0) + '%';
         }
 
         this.prevRotate = curRotate;
@@ -146,8 +166,8 @@ let PointerEvent = (function() {
       } else {
         // Движение вверх / вниз / влево / вправо
         if (this.startMoveX > 0 || this.startMoveY > 0) {
-          const diffMoveX = (ev.clientX - this.startMoveX);
-          const diffMoveY = (this.startMoveY - ev.clientY);
+          const diffMoveX = ev.clientX - this.startMoveX;
+          const diffMoveY = this.startMoveY - ev.clientY;
           this.currentLeft = _position(this.currentLeft + diffMoveX, this.elWidth, this.zoom);
           this.currentBottom = _position(this.currentBottom + diffMoveY, this.elHeight, this.zoom);
           this.el.style.left = this.currentLeft + 'px';
@@ -159,12 +179,12 @@ let PointerEvent = (function() {
     }
   }
 
-  return PointerEvent;
+  return PointerEventTouch;
 })();
 
 // TODO: Work with multiple items
-function init() {
-  let el = document.getElementById('camImage');
+function init(): void {
+  let el: HTMLImageElement = document.getElementById('camImage') as HTMLImageElement;
 
   el.oncontextmenu = function(event) {
     event.preventDefault();
@@ -172,15 +192,15 @@ function init() {
     return false;
   };
 
-  let item = new PointerEvent(el, el.offsetWidth / 2, el.offsetHeight / 2);
+  let item = new PointerEventTouch(el, el.offsetWidth / 2, el.offsetHeight / 2);
 
-  el.addEventListener('pointerdown', (ev) => item.pointerdownHandler(ev));
-  el.addEventListener('pointermove', (ev) => item.pointermoveHandler(ev));
+  el.addEventListener('pointerdown', ev => item.pointerdownHandler(ev));
+  el.addEventListener('pointermove', ev => item.pointermoveHandler(ev));
 
-  el.addEventListener('pointerup', (ev) => item.pointerupHandler(ev));
-  el.addEventListener('pointercancel', (ev) => item.pointerupHandler(ev));
-  el.addEventListener('pointerout', (ev) => item.pointerupHandler(ev));
-  el.addEventListener('pointerleave', (ev) => item.pointerupHandler(ev));
+  el.addEventListener('pointerup', ev => item.pointerupHandler(ev));
+  el.addEventListener('pointercancel', ev => item.pointerupHandler(ev));
+  el.addEventListener('pointerout', ev => item.pointerupHandler(ev));
+  el.addEventListener('pointerleave', ev => item.pointerupHandler(ev));
 }
 
 window.onload = function() {

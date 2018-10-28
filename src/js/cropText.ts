@@ -3,7 +3,7 @@ for (let i = 0; i < list.length; i++) {
   cropTextToFit(list[i]);
 }
 
-function cropTextToFit(o) {
+function cropTextToFit(o): void {
   let lastIndex;
   let txt = o.innerHTML;
   if (!o.title) {

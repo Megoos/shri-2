@@ -1,22 +1,23 @@
-let videos = document.querySelectorAll('.video');
-let inputs = document.querySelectorAll('.video-range__input');
-let muteButtons = document.querySelectorAll('.mute-button');
+let videos: NodeListOf<HTMLVideoElement> = document.querySelectorAll('.video');
+let inputs: NodeListOf<HTMLInputElement> = document.querySelectorAll('.video-range__input');
+let muteButtons: NodeListOf<HTMLElement> = document.querySelectorAll('.mute-button');
 
 // изменение яркости и контрастности
 inputs.forEach(input => {
-  input.oninput = function() {
-    const { videoNum, type } = this.dataset;
+  input.oninput = function(event) {
+    const target = event.target as HTMLInputElement;
+    const { videoNum, type } = target.dataset;
     const video = videos[parseInt(videoNum, 10) - 1];
-    this.nextElementSibling.textContent = this.value + '%';
+    target.nextElementSibling.textContent = target.value + '%';
 
-    video.dataset[type] = this.value;
+    video.dataset[type] = target.value;
     const { brightness, contrast } = video.dataset;
     video.style.filter = `brightness(${brightness}%) contrast(${contrast}%)`;
   };
 });
 // анализатор звука
 function analyserInit(video) {
-  const context = new (window.AudioContext || window.webkitAudioContext)();
+  const context = new ((window as any).AudioContext || (window as any).webkitAudioContext)();
   const source = context.createMediaElementSource(video);
   const analyser = context.createAnalyser();
   analyser.smoothingTimeConstant = 0.1;
@@ -49,9 +50,9 @@ videos.forEach(video => {
 });
 
 // включение и выключение зввука
-muteButtons.forEach(mute => {
+muteButtons.forEach((mute) => {
   mute.onclick = function() {
-    const video = mute.parentNode.previousElementSibling;
+    const video = (mute.parentNode as HTMLElement).previousElementSibling as HTMLVideoElement;
 
     if (video.muted) {
       video.muted = false;

@@ -1,5 +1,4 @@
 const gulp = require('gulp');
-const fs = require('fs');
 const browserSync = require('browser-sync').create();
 const reload = browserSync.reload;
 const sass = require('gulp-sass');

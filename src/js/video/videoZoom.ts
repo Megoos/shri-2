@@ -1,6 +1,6 @@
-const videoContainers = document.querySelectorAll('.info-item');
-const wrapper = document.querySelector('.wrapper');
-const backLayer = document.querySelector('.back-layer');
+const videoContainers: NodeListOf<HTMLDivElement> = document.querySelectorAll('.info-item');
+const wrapper: HTMLDivElement = document.querySelector('.wrapper');
+const backLayer: HTMLDivElement = document.querySelector('.back-layer');
 
 function transformation(container) {
   const { clientWidth: docWidth, clientHeight: docHeight } = document.documentElement;

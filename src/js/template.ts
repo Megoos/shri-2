@@ -1,9 +1,9 @@
-const t = document.querySelector('.info-item-template');
+const t: HTMLTemplateElement = document.querySelector('.info-item-template');
 const container = document.querySelector('.content');
 
 // общая функция для генерации компонентов
-function create(name, attributes) {
-  let el = document.createElement(name);
+function create(name: string, attributes: object, arg?: Array<HTMLElement | string>): HTMLElement {
+  let el: HTMLElement = document.createElement(name);
   if (typeof attributes === 'object') {
     for (let i in attributes) {
       el.setAttribute(i, attributes[i]);
@@ -15,8 +15,13 @@ function create(name, attributes) {
       }
     }
   }
-  for (let i = 2; i < arguments.length; i++) {
-    let val = arguments[i];
+
+  if (!arg) {
+    return el;
+  }
+
+  for (let i = 0; i < arg.length; i++) {
+    let val: HTMLElement | string | Text = arg[i];
     if (typeof val === 'string') {
       val = document.createTextNode(val);
     }
@@ -34,7 +39,7 @@ const createInterline = () => {
   return create(
     'div',
     { class: 'info-item-interline-container' },
-    create('div', { class: 'info-item-interline-line' })
+    [create('div', { class: 'info-item-interline-line' })]
   );
 };
 
@@ -42,12 +47,12 @@ const createGraph = (src, srcset = '') => {
   const div = create(
     'div',
     { class: 'info-item__img-container' },
-    create('img', {
+    [create('img', {
       class: 'info-item__img',
       sizes: '(min-width: 1140px) 336px, (min-width: 768px) 224px, 112px',
       src: src,
       srcset: srcset
-    })
+    })]
   );
 
   return div;
@@ -57,7 +62,7 @@ const createImg = (src, srcset = '') => {
   const div = create(
     'div',
     { class: 'info-item__img-container' },
-    create('img', {
+    [create('img', {
       class: 'info-item__img',
       sizes: '(min-width: 1140px) 336px, (min-width: 768px) 224px, 112px',
       src: src,
@@ -65,7 +70,7 @@ const createImg = (src, srcset = '') => {
       id: 'camImage',
       'touch-action': 'none',
       draggable: 'false'
-    })
+    })]
   );
 
   return div;
@@ -75,37 +80,37 @@ const createCameraControl = (zoom = '', bright = '') => {
   return create(
     'div',
     { class: 'info-item-camera-control' },
-    create(
+    [create(
       'span',
       { class: 'info-item-camera-control__desc' },
-      'Приближение: ',
-      create('span', { class: 'info-item-camera-control-zoom', id: 'zoom' }, zoom)
+      ['Приближение: ',
+        create('span', { class: 'info-item-camera-control-zoom', id: 'zoom' }, [zoom])]
     ),
-    create(
+      create(
       'span',
       { class: 'info-item-camera-control__desc' },
-      'Яркость: ',
-      create('span', { class: 'info-item-camera-control-bright', id: 'brightness' }, bright)
-    )
+        ['Яркость: ',
+          create('span', { class: 'info-item-camera-control-bright', id: 'brightness' }, [bright])]
+    )]
   );
 };
 
-const createTempAndHum = (temperature = '', humidity = '') => {
+const createTempAndHum = (temperature: string | number = '', humidity: string | number = '') => {
   return create(
     'div',
     { class: 'info-item-temperature' },
-    create(
+    [create(
       'span',
       { class: 'info-item-temperature__desc' },
-      'Температру: ',
-      create('span', { class: 'info-item-temperature-temp' }, temperature + ' C')
+      ['Температру: ',
+        create('span', { class: 'info-item-temperature-temp' }, [temperature + ' C'])]
     ),
-    create(
+      create(
       'span',
       { class: 'info-item-temperature__desc' },
-      'Влажность: ',
-      create('span', { class: 'info-item-temperature-wet' }, humidity + '%')
-    )
+        ['Влажность: ',
+          create('span', { class: 'info-item-temperature-wet' }, [humidity + '%'])]
+    )]
   );
 };
 
@@ -124,71 +129,76 @@ const createMusicBlock = (logo, name, time, volume) => {
   const logoBlock = create(
     'div',
     { class: 'info-item-music__logo-container' },
-    create('img', { class: 'info-item-music__logo', src: logo, alt: '' })
+    [create('img', { class: 'info-item-music__logo', src: logo, alt: '' })]
   );
 
   const infoBlock = create(
     'div',
     { class: 'info-item-music_bar' },
-    create('div', { class: 'info-item-music__title' }, name),
-    create(
+    [create('div', { class: 'info-item-music__title' }, name),
+      create(
       'div',
       { class: 'info-item-music__range' },
-      create('input', {
-        type: 'range',
-        min: '0',
-        max: '100',
-        value: '23',
-        class: 'info-item-music__range-slider'
-      }),
-      create('p', { class: 'info-item-music__time' }, time)
-    )
+        [create('input', {
+          type: 'range',
+          min: '0',
+          max: '100',
+          value: '23',
+          class: 'info-item-music__range-slider'
+        }),
+          create('p', { class: 'info-item-music__time' }, time)]
+    )]
   );
 
   const volumeBlock = create(
     'div',
     { class: 'info-item-music__range' },
-    create('input', {
+    [create('input', {
       type: 'range',
       min: '0',
       max: '100',
       value: '80',
       class: 'info-item-music__range-volume'
     }),
-    create('p', { class: 'info-item-music__volume' }, volume)
+      create('p', { class: 'info-item-music__volume' }, [volume])]
   );
 
   const controlBlock = create(
     'div',
     { class: 'info-item-music__control-buttons' },
-    create(
+    [create(
       'div',
       { class: 'info-item-music__button info-item-music__button_prev' },
-      create('span', { class: 'info-item-icon info-item-icon__prev' })
+      [create('span', { class: 'info-item-icon info-item-icon__prev' })]
     ),
-    create(
+      create(
       'div',
       { class: 'info-item-music__button info-item-music__button_next' },
-      create('span', { class: 'info-item-icon info-item-icon__next' })
+      [create('span', { class: 'info-item-icon info-item-icon__next' })]
     ),
-    volumeBlock
+      volumeBlock]
   );
 
   const div = create(
     'div',
     { class: 'info-item-music' },
-    create('div', { class: 'info-item-music__desc' }, logoBlock, infoBlock),
-    create('div', { class: 'info-item-music__control' }, controlBlock)
+    [create('div', { class: 'info-item-music__desc' }, [logoBlock, infoBlock]),
+      create('div', { class: 'info-item-music__control' }, [controlBlock])]
   );
 
   return div;
 };
 // - - -
 
+function cloneNode<T extends Node>(node: T, deep: boolean) {
+  return node.cloneNode(deep) as T;
+}
+
 // Шаблонизация исходных данных
-data.events.forEach(item => {
-  let addInfo;
-  const content = t.cloneNode(true).content;
+data.events.forEach((item) => {
+  const addInfo = create('div', { class: 'info-item-add-info' });
+  const node = cloneNode(t, true);
+  const content = node.content;
 
   content.querySelector('.info-item').classList.add(`info-item__${item.size}`);
   content.querySelector('.info-item__title').textContent = item.title;
@@ -210,7 +220,6 @@ data.events.forEach(item => {
       content.querySelector('.info-item').appendChild(createInterline());
     }
 
-    addInfo = create('div', { class: 'info-item-add-info' });
     content.querySelector('.info-item').appendChild(addInfo);
   }
 
