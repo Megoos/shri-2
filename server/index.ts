@@ -5,27 +5,29 @@ const app = express();
 const { promisify } = require('util');
 const readFileAsync = promisify(fs.readFile);
 const dateDiff = require('./utils/dateDiff');
+import { Router, Request, Response, NextFunction } from 'express';
 
 const port = 8000;
 const types = ['info', 'critical'];
 const _path = './events.json';
 
-app.get('/status', (request, response) => {
+interface Item { [key: string]: string;}
+
+app.get('/status', (request: Request, response: Response) => {
   response.send(dateDiff(process.uptime()));
 });
 
-app.get('/api/events', (request, response, next) => {
+app.get('/api/events', (request: Request, response: Response, next: NextFunction) => {
   readFileAsync(path.join(__dirname, _path), { encoding: 'utf8' })
-    .then(data => {
+    .then((data: string) => {
       let result = JSON.parse(data).events;
-      console.log(request.query.type);
       // Если в запросе переданы параметры
       if (typeof request.query.type !== 'undefined') {
         if (typeof request.query.type !== 'string') {
           return response.status(400).send('incorrect type');
         }
 
-        const queryTypes = request.query.type.split(':');
+        const queryTypes: Array<string> = request.query.type.split(':');
 
         // проверка соответсвуют ли переданные параметры доступным
         for (let index = 0; index < queryTypes.length; index++) {
@@ -34,28 +36,28 @@ app.get('/api/events', (request, response, next) => {
           }
         }
 
-        result = result.filter(item => queryTypes.includes(item.type));
+        result = result.filter((item: Item) => queryTypes.includes(item.type));
       }
 
       response.json({ events: result });
     })
-    .catch(err => {
+    .catch((err: Error) => {
       next(err);
     });
 });
 
-app.use((request, response) => {
+app.use((request: Request, response: Response) => {
   response
     .type('text/html')
     .status(404)
     .send('<h1>Page not found</h1>');
 });
 
-app.use((err, request, response) => {
+app.use((err: Error, request: Request, response: Response) => {
   response.status(500).send(err.message);
 });
 
-app.listen(port, err => {
+app.listen(port, (err: Error) => {
   if (err) {
     return console.log('[Error]: ', err);
   }
