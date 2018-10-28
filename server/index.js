@@ -18,9 +18,13 @@ app.get('/api/events', (request, response, next) => {
     readFileAsync(path.join(__dirname, _path), { encoding: 'utf8' })
         .then(data => {
             let result = JSON.parse(data).events;
-
+            console.log(request.query.type);
             //Если в запросе переданы параметры
             if (typeof request.query.type !== 'undefined') {
+                if (typeof request.query.type !== 'string') {
+                    return response.status(400).send('incorrect type');
+                }
+
                 const queryTypes = request.query.type.split(':');
 
                 //проверка соответсвуют ли переданные параметры доступным
