@@ -1,5 +1,5 @@
 let PointerEventTouch = (function() {
-  const _scale = function(scale, maxZoom) {
+  const _scale = function(scale: number, maxZoom: number) {
     if (scale > maxZoom) {
       return maxZoom;
     }
@@ -11,7 +11,7 @@ let PointerEventTouch = (function() {
     return scale;
   };
 
-  const _position = function(x, el, zoom) {
+  const _position = function(x: number, el: number, zoom: number) {
     if (x > el * zoom - el) {
       return el * zoom - el;
     }
@@ -23,7 +23,7 @@ let PointerEventTouch = (function() {
     return x;
   };
 
-  const _brightness = function(value) {
+  const _brightness = function(value: number) {
     if (value > 200) {
       return 200;
     }
@@ -35,7 +35,7 @@ let PointerEventTouch = (function() {
     return value;
   };
 
-  const _removeEvent = function(ev, evCache) {
+  const _removeEvent = function(ev: PointerEvent, evCache: PointerEvent[]) {
     // Удаление текущего эвента из массива
     for (let i = 0; i < evCache.length; i++) {
       if (evCache[i].pointerId === ev.pointerId) {
@@ -63,7 +63,7 @@ let PointerEventTouch = (function() {
     prevRotate: number;
     action: string;
 
-    constructor(el, width, height) {
+    constructor(el: HTMLImageElement, width: number, height: number) {
       this.maxZoom = 4;
       this.evCache = [];
       this.prevDiff = -1;
@@ -82,7 +82,7 @@ let PointerEventTouch = (function() {
       this.action = 'none';
     }
 
-    pointerupHandler(ev) {
+    pointerupHandler(ev: PointerEvent) {
       // console.log(ev.type, ev);
       this.evCache = _removeEvent(ev, this.evCache);
       this.action = 'none';
@@ -90,7 +90,7 @@ let PointerEventTouch = (function() {
       this.startMoveY = -1;
     }
 
-    pointerdownHandler(ev) {
+    pointerdownHandler(ev: PointerEvent) {
       // Добавление эвента в массив событий
       // console.log('pointerDown', ev);
       this.evCache.push(ev);
@@ -98,7 +98,7 @@ let PointerEventTouch = (function() {
       this.startMoveY = ev.clientY;
     }
 
-    pointermoveHandler(ev) {
+    pointermoveHandler(ev: PointerEvent) {
       // console.log('pointerMove', ev);
       // Поиск текущего эвента в массиве событий
       for (let i = 0; i < this.evCache.length; i++) {

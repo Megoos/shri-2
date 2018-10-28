@@ -16,15 +16,15 @@ inputs.forEach(input => {
   };
 });
 // анализатор звука
-function analyserInit(video) {
+function analyserInit(video: HTMLVideoElement) {
   const context = new ((window as any).AudioContext || (window as any).webkitAudioContext)();
   const source = context.createMediaElementSource(video);
   const analyser = context.createAnalyser();
   analyser.smoothingTimeConstant = 0.1;
   analyser.fftSize = 32;
   let data = new Uint8Array(analyser.frequencyBinCount);
-  const canvas = video.parentNode.querySelector('.video-canvas');
-  const canvasWrapper = video.parentNode.querySelector('.video-analyzer_block');
+  const canvas = video.parentNode.querySelector<HTMLCanvasElement>('.video-canvas');
+  const canvasWrapper = video.parentNode.querySelector<HTMLDivElement>('.video-analyzer_block');
 
   const ctx = canvas.getContext('2d');
   setInterval(function() {

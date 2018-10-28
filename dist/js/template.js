@@ -28,7 +28,7 @@ function create(name, attributes, arg) {
 }
 // далее идут отдельный функции для создание элементов
 var createDescription = function (desc) {
-    return create('div', { class: 'info-item__description' }, desc);
+    return create('div', { class: 'info-item__description' }, [desc]);
 };
 var createInterline = function () {
     return create('div', { class: 'info-item-interline-container' }, [create('div', { class: 'info-item-interline-line' })]);
@@ -75,14 +75,14 @@ var createTempAndHum = function (temperature, humidity) {
 var createButtons = function (buttons) {
     var div = create('div', { class: 'info-item-button-container' });
     buttons.forEach(function (el) {
-        var newA = create('a', { class: 'info-item-button', href: '#' }, el);
+        var newA = create('a', { class: 'info-item-button', href: '#' }, [el]);
         div.appendChild(newA);
     });
     return div;
 };
 var createMusicBlock = function (logo, name, time, volume) {
     var logoBlock = create('div', { class: 'info-item-music__logo-container' }, [create('img', { class: 'info-item-music__logo', src: logo, alt: '' })]);
-    var infoBlock = create('div', { class: 'info-item-music_bar' }, [create('div', { class: 'info-item-music__title' }, name),
+    var infoBlock = create('div', { class: 'info-item-music_bar' }, [create('div', { class: 'info-item-music__title' }, [name]),
         create('div', { class: 'info-item-music__range' }, [create('input', {
                 type: 'range',
                 min: '0',
@@ -90,7 +90,7 @@ var createMusicBlock = function (logo, name, time, volume) {
                 value: '23',
                 class: 'info-item-music__range-slider'
             }),
-            create('p', { class: 'info-item-music__time' }, time)])]);
+            create('p', { class: 'info-item-music__time' }, [time])])]);
     var volumeBlock = create('div', { class: 'info-item-music__range' }, [create('input', {
             type: 'range',
             min: '0',

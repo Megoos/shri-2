@@ -2,7 +2,7 @@ const videoContainers: NodeListOf<HTMLDivElement> = document.querySelectorAll('.
 const wrapper: HTMLDivElement = document.querySelector('.wrapper');
 const backLayer: HTMLDivElement = document.querySelector('.back-layer');
 
-function transformation(container) {
+function transformation(container: HTMLDivElement) {
   const { clientWidth: docWidth, clientHeight: docHeight } = document.documentElement;
   const viewCenter = { x: docWidth / 2, y: docHeight / 2 };
   const { clientWidth: elWidth, clientHeight: elHeight } = container;
@@ -18,7 +18,7 @@ function transformation(container) {
   return transform;
 }
 
-function zoomVideo(videoNum) {
+function zoomVideo(videoNum: string) {
   const container = videoContainers[parseInt(videoNum, 10) - 1];
 
   if (!wrapper.classList.contains('fullscreen')) {

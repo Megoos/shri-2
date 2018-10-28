@@ -1,9 +1,10 @@
-let list = document.body.getElementsByClassName('info-item__title');
+let list = document.body.getElementsByClassName('info-item__title') as HTMLCollectionOf<HTMLElement>;
+
 for (let i = 0; i < list.length; i++) {
   cropTextToFit(list[i]);
 }
 
-function cropTextToFit(o): void {
+function cropTextToFit(o: HTMLElement): void {
   let lastIndex;
   let txt = o.innerHTML;
   if (!o.title) {
@@ -24,7 +25,7 @@ function cropTextToFit(o): void {
 window.addEventListener(
   'resize',
   function() {
-    let list = document.body.getElementsByClassName('info-item__title');
+    let list = document.body.getElementsByClassName('info-item__title') as HTMLCollectionOf<HTMLElement>;
     for (let i = 0; i < list.length; i++) {
       cropTextToFit(list[i]);
     }

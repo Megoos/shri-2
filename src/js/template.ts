@@ -1,8 +1,12 @@
 const t: HTMLTemplateElement = document.querySelector('.info-item-template');
-const container = document.querySelector('.content');
+const container: HTMLDivElement = document.querySelector('.content');
+
+interface Atributes {
+  [key: string]: any;
+}
 
 // общая функция для генерации компонентов
-function create(name: string, attributes: object, arg?: Array<HTMLElement | string>): HTMLElement {
+function create(name: string, attributes: Atributes, arg?: Array<HTMLElement | string>): HTMLElement {
   let el: HTMLElement = document.createElement(name);
   if (typeof attributes === 'object') {
     for (let i in attributes) {
@@ -31,8 +35,8 @@ function create(name: string, attributes: object, arg?: Array<HTMLElement | stri
 }
 
 // далее идут отдельный функции для создание элементов
-const createDescription = desc => {
-  return create('div', { class: 'info-item__description' }, desc);
+const createDescription = (desc: string) => {
+  return create('div', { class: 'info-item__description' }, [desc]);
 };
 
 const createInterline = () => {
@@ -43,7 +47,7 @@ const createInterline = () => {
   );
 };
 
-const createGraph = (src, srcset = '') => {
+const createGraph = (src: string, srcset: string = '') => {
   const div = create(
     'div',
     { class: 'info-item__img-container' },
@@ -58,7 +62,7 @@ const createGraph = (src, srcset = '') => {
   return div;
 };
 
-const createImg = (src, srcset = '') => {
+const createImg = (src: string, srcset: string = '') => {
   const div = create(
     'div',
     { class: 'info-item__img-container' },
@@ -114,18 +118,18 @@ const createTempAndHum = (temperature: string | number = '', humidity: string | 
   );
 };
 
-const createButtons = buttons => {
+const createButtons = (buttons: string[]) => {
   const div = create('div', { class: 'info-item-button-container' });
 
   buttons.forEach(el => {
-    const newA = create('a', { class: 'info-item-button', href: '#' }, el);
+    const newA = create('a', { class: 'info-item-button', href: '#' }, [el]);
     div.appendChild(newA);
   });
 
   return div;
 };
 
-const createMusicBlock = (logo, name, time, volume) => {
+const createMusicBlock = (logo: string, name: string, time: string, volume: string): HTMLElement => {
   const logoBlock = create(
     'div',
     { class: 'info-item-music__logo-container' },
@@ -135,7 +139,7 @@ const createMusicBlock = (logo, name, time, volume) => {
   const infoBlock = create(
     'div',
     { class: 'info-item-music_bar' },
-    [create('div', { class: 'info-item-music__title' }, name),
+    [create('div', { class: 'info-item-music__title' }, [name]),
       create(
       'div',
       { class: 'info-item-music__range' },
@@ -146,7 +150,7 @@ const createMusicBlock = (logo, name, time, volume) => {
           value: '23',
           class: 'info-item-music__range-slider'
         }),
-          create('p', { class: 'info-item-music__time' }, time)]
+          create('p', { class: 'info-item-music__time' }, [time])]
     )]
   );
 
