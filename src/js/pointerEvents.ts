@@ -144,7 +144,10 @@ let PointerEventTouch = (function() {
             this.el.style.bottom = this.currentBottom + 'px';
           }
           this.action = 'zoom';
-          document.getElementById('zoom').textContent = `1 : ${this.zoom.toFixed(2)}`;
+
+          const elZoom = document.getElementById('zoom');
+
+          elZoom && (elZoom.textContent = `1 : ${this.zoom.toFixed(2)}`);
         } else if (this.prevRotate > 1.9 || this.action === 'rotate') {
           // Поворот
           if (curRotate > this.prevRotate) {
@@ -157,8 +160,10 @@ let PointerEventTouch = (function() {
 
           this.el.style.filter = `brightness(${this.currentBrightness.toFixed(0)}%)`;
           this.action = 'rotate';
-          document.getElementById('brightness').textContent =
-            this.currentBrightness.toFixed(0) + '%';
+
+          const elBrightness = document.getElementById('brightness');
+
+          elBrightness && (elBrightness.textContent = this.currentBrightness.toFixed(0) + '%');
         }
 
         this.prevRotate = curRotate;

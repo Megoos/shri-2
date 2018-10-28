@@ -1,7 +1,14 @@
+"use strict";
 var videoContainers = document.querySelectorAll('.info-item');
 var wrapper = document.querySelector('.wrapper');
 var backLayer = document.querySelector('.back-layer');
 function transformation(container) {
+    if (!document.documentElement || !wrapper) {
+        return {
+            translate: { x: 0, y: 0 },
+            scale: 1
+        };
+    }
     var _a = document.documentElement, docWidth = _a.clientWidth, docHeight = _a.clientHeight;
     var viewCenter = { x: docWidth / 2, y: docHeight / 2 };
     var elWidth = container.clientWidth, elHeight = container.clientHeight;
@@ -17,19 +24,19 @@ function transformation(container) {
 }
 function zoomVideo(videoNum) {
     var container = videoContainers[parseInt(videoNum, 10) - 1];
-    if (!wrapper.classList.contains('fullscreen')) {
+    if (wrapper && !wrapper.classList.contains('fullscreen')) {
         var _a = transformation(container), translate = _a.translate, scale = _a.scale;
         container.style.transform = "translate(" + translate.x + "px, " + translate.y + "px) scale(" + scale + ")";
         container.classList.add('active');
-        wrapper.classList.add('fullscreen');
-        backLayer.classList.add('active');
+        wrapper && wrapper.classList.add('fullscreen');
+        backLayer && backLayer.classList.add('active');
     }
     else {
         container.style.transform = "translate(0px, 0px) scale(1)";
-        backLayer.classList.remove('active');
+        backLayer && backLayer.classList.remove('active');
         setTimeout(function () {
             container.classList.remove('active');
-            wrapper.classList.remove('fullscreen');
+            wrapper && wrapper.classList.remove('fullscreen');
         }, 300);
     }
 }
@@ -37,7 +44,7 @@ videos.forEach(function (video) {
     video.addEventListener('mousedown', function () {
         var videoNum = this.dataset.videoNum;
         requestAnimationFrame(function () {
-            zoomVideo(videoNum);
+            videoNum && zoomVideo(videoNum);
         });
     });
 });

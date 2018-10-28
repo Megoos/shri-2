@@ -1,4 +1,8 @@
+"use strict";
 function initVideo(video, url) {
+    if (!video) {
+        return;
+    }
     if (window.Hls.isSupported()) {
         var hls = new window.Hls();
         hls.loadSource(url);

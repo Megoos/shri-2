@@ -1,3 +1,4 @@
+"use strict";
 var PointerEventTouch = (function () {
     var _scale = function (scale, maxZoom) {
         if (scale > maxZoom) {
@@ -102,7 +103,8 @@ var PointerEventTouch = (function () {
                         this.el.style.bottom = this.currentBottom + 'px';
                     }
                     this.action = 'zoom';
-                    document.getElementById('zoom').textContent = "1 : " + this.zoom.toFixed(2);
+                    var elZoom = document.getElementById('zoom');
+                    elZoom && (elZoom.textContent = "1 : " + this.zoom.toFixed(2));
                 }
                 else if (this.prevRotate > 1.9 || this.action === 'rotate') {
                     // Поворот
@@ -114,8 +116,8 @@ var PointerEventTouch = (function () {
                     }
                     this.el.style.filter = "brightness(" + this.currentBrightness.toFixed(0) + "%)";
                     this.action = 'rotate';
-                    document.getElementById('brightness').textContent =
-                        this.currentBrightness.toFixed(0) + '%';
+                    var elBrightness = document.getElementById('brightness');
+                    elBrightness && (elBrightness.textContent = this.currentBrightness.toFixed(0) + '%');
                 }
                 this.prevRotate = curRotate;
                 this.prevDiff = curDiff;

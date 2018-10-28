@@ -1,4 +1,8 @@
-function initVideo(video: HTMLVideoElement, url: string): void {
+function initVideo(video: HTMLVideoElement | null, url: string): void {
+  if (!video) {
+    return;
+  }
+
   if ((window as any).Hls.isSupported()) {
     let hls = new (window as any).Hls();
     hls.loadSource(url);

@@ -7,12 +7,14 @@ inputs.forEach(input => {
   input.oninput = function(event) {
     const target = event.target as HTMLInputElement;
     const { videoNum, type } = target.dataset;
-    const video = videos[parseInt(videoNum, 10) - 1];
-    target.nextElementSibling.textContent = target.value + '%';
+    if (videoNum && type) {
+      const video = videos[parseInt(videoNum, 10) - 1];
+      target.nextElementSibling && (target.nextElementSibling.textContent = target.value + '%');
 
-    video.dataset[type] = target.value;
-    const { brightness, contrast } = video.dataset;
-    video.style.filter = `brightness(${brightness}%) contrast(${contrast}%)`;
+      video.dataset[type] = target.value;
+      const { brightness, contrast } = video.dataset;
+      video.style.filter = `brightness(${brightness}%) contrast(${contrast}%)`;
+    }
   };
 });
 // анализатор звука
@@ -23,26 +25,32 @@ function analyserInit(video: HTMLVideoElement) {
   analyser.smoothingTimeConstant = 0.1;
   analyser.fftSize = 32;
   let data = new Uint8Array(analyser.frequencyBinCount);
-  const canvas = video.parentNode.querySelector<HTMLCanvasElement>('.video-canvas');
-  const canvasWrapper = video.parentNode.querySelector<HTMLDivElement>('.video-analyzer_block');
+  const canvas = video.parentNode && video.parentNode.querySelector<HTMLCanvasElement>('.video-canvas');
+  const canvasWrapper = video.parentNode && video.parentNode.querySelector<HTMLDivElement>('.video-analyzer_block');
+
+  if (!canvas || !canvasWrapper) {
+    return;
+  }
 
   const ctx = canvas.getContext('2d');
-  setInterval(function() {
-    analyser.getByteFrequencyData(data);
-    let v = 0;
-    for (let i = 0; i < data.length; i++) {
-      if (data[i] > v) {
-        v = data[i];
+  if (canvas && canvasWrapper && ctx) {
+    setInterval(function() {
+      analyser.getByteFrequencyData(data);
+      let v = 0;
+      for (let i = 0; i < data.length; i++) {
+        if (data[i] > v) {
+          v = data[i];
+        }
       }
-    }
-    canvas.height = canvasWrapper.offsetHeight;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#fdf036';
-    ctx.fillRect(0, 0, 30, v / 2);
-  }, 100);
+      canvas.height = canvasWrapper.offsetHeight;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#fdf036';
+      ctx.fillRect(0, 0, 30, v / 2);
+    }, 100);
 
-  source.connect(analyser);
-  analyser.connect(context.destination);
+    source.connect(analyser);
+    analyser.connect(context.destination);
+  }
 }
 
 videos.forEach(video => {

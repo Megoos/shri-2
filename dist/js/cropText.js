@@ -1,3 +1,4 @@
+"use strict";
 var list = document.body.getElementsByClassName('info-item__title');
 for (var i = 0; i < list.length; i++) {
     cropTextToFit(list[i]);

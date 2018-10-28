@@ -1,3 +1,4 @@
+"use strict";
 // открытие меню в мобильной версии
 var hamburger = document.querySelectorAll('.hamburger-menu-link');
 var closeEl = document.querySelectorAll('.close');
