@@ -189,7 +189,11 @@ let PointerEventTouch = (function() {
 
 // TODO: Work with multiple items
 function init(): void {
-  let el: HTMLImageElement = document.getElementById('camImage') as HTMLImageElement;
+  let el: HTMLImageElement | null = document.querySelector<HTMLImageElement>('#camImage');
+
+  if (!el) {
+    return;
+  }
 
   el.oncontextmenu = function(event) {
     event.preventDefault();
