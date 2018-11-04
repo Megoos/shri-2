@@ -5,7 +5,7 @@
     "rules": {
         "semicolon": [true, "always"],
         "space-before-function-paren": [true, "never"],
-        "no-empty": [true, "allow-empty-catch", "allow-empty-functions"]
+        "no-empty": [true, "allow-empty-functions"]
     },
     "rulesDirectory": []
 }
