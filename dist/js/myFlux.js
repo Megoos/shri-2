@@ -1,0 +1,1 @@
+"use strict";var Flux=function(){function t(t,e){this.currentReducer=t,this.currentState=e,this.listener=function(){}}return t.prototype.dispatch=function(t){return this.currentState=this.currentReducer(this.currentState,t),this.listener(),t},t.prototype.subscribe=function(t){this.listener=t},t.prototype.getState=function(){return this.currentState},t}();
