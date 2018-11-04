@@ -28,7 +28,9 @@ function transformation(container: HTMLDivElement) {
 function zoomVideo(videoNum: string) {
   const container = videoContainers[parseInt(videoNum, 10) - 1];
 
-  if (wrapper && !wrapper.classList.contains('fullscreen')) {
+  const { [videoNum]: state } = store.getState();
+
+  if (state.isActive) {
     const { translate, scale } = transformation(container);
 
     container.style.transform = `translate(${translate.x}px, ${translate.y}px) scale(${scale})`;
@@ -46,10 +48,27 @@ function zoomVideo(videoNum: string) {
 }
 
 videos.forEach(video => {
+  const { videoNum } = video.dataset;
+
+  if (!videoNum) {
+    return;
+  }
+
+  const { [videoNum]: state } = store.getState();
+
+  video.style.filter = `brightness(${state.brightness}%) contrast(${state.contrast}%)`;
+  state.isActive && zoomVideo(videoNum);
+
   video.addEventListener('mousedown', function() {
-    const { videoNum } = this.dataset;
+    store.dispatch({
+      type: 'CHANGE_ACTIVE',
+      payload: {
+        num: videoNum
+      }
+    });
+
     requestAnimationFrame(() => {
-      videoNum && zoomVideo(videoNum);
+      zoomVideo(videoNum);
     });
   });
 });

@@ -4,6 +4,16 @@ let muteButtons: NodeListOf<HTMLElement> = document.querySelectorAll('.mute-butt
 
 // изменение яркости и контрастности
 inputs.forEach(input => {
+  const { videoNum, type } = input.dataset;
+  if (!videoNum || !type) {
+    return;
+  }
+
+  const { [videoNum]: state } = store.getState();
+
+  input.value = state[type];
+  input.nextElementSibling && (input.nextElementSibling.textContent = state[type] + '%');
+
   input.oninput = function(event) {
     const target = event.target as HTMLInputElement;
     const { videoNum, type } = target.dataset;
@@ -11,12 +21,31 @@ inputs.forEach(input => {
       const video = videos[parseInt(videoNum, 10) - 1];
       target.nextElementSibling && (target.nextElementSibling.textContent = target.value + '%');
 
-      video.dataset[type] = target.value;
-      const { brightness, contrast } = video.dataset;
-      video.style.filter = `brightness(${brightness}%) contrast(${contrast}%)`;
+      if (type === 'brightness') {
+        store.dispatch({
+          type: 'CHANGE_BRIGHTNESS',
+          payload: {
+            num: videoNum,
+            brightness: target.value
+          }
+        });
+      } else if (type === 'contrast') {
+        store.dispatch({
+          type: 'CHANGE_CONTRAST',
+          payload: {
+            num: videoNum,
+            contrast: target.value
+          }
+        });
+      }
+
+      const { [videoNum]: state } = store.getState();
+
+      video.style.filter = `brightness(${state.brightness}%) contrast(${state.contrast}%)`;
     }
   };
 });
+
 // анализатор звука
 function analyserInit(video: HTMLVideoElement) {
   const context = new ((window as any).AudioContext || (window as any).webkitAudioContext)();
@@ -59,17 +88,30 @@ videos.forEach(video => {
 
 // включение и выключение зввука
 muteButtons.forEach((mute) => {
-  mute.onclick = function() {
-    const video = (mute.parentNode as HTMLElement).previousElementSibling as HTMLVideoElement;
+  const video = (mute.parentNode as HTMLElement).previousElementSibling as HTMLVideoElement;
+  const { videoNum } = video.dataset;
 
-    if (video.muted) {
-      video.muted = false;
-      mute.textContent = 'on';
-      mute.style.backgroundColor = 'green';
-    } else {
-      video.muted = true;
-      mute.textContent = 'off';
-      mute.style.backgroundColor = 'red';
-    }
+  if (!videoNum) {
+    return;
+  }
+
+  const { [videoNum]: state } = store.getState();
+  video.muted = state.isMuted;
+  mute.textContent = state.isMuted ? 'off' : 'on';
+  mute.style.backgroundColor = state.isMuted ? 'red' : 'green';
+
+  mute.onclick = function() {
+    store.dispatch({
+      type: 'CHANGE_MUTED',
+      payload: {
+        num: videoNum
+      }
+    });
+
+    const { [videoNum]: state } = store.getState();
+
+    video.muted = state.isMuted;
+    mute.textContent = state.isMuted ? 'off' : 'on';
+    mute.style.backgroundColor = state.isMuted ? 'red' : 'green';
   };
 });
