@@ -62,8 +62,6 @@ function controls(state: any, action: ActionType) {
 
 const storageStore = localStorage.getItem('store');
 const store = new Flux(controls, storageStore ? JSON.parse(storageStore) : initialStateControls);
+const localStorageSub = (store: Obj) => { localStorage.setItem('store', JSON.stringify(store)); };
 
-store.subscribe(() => {
-  console.log(store.getState());
-  localStorage.setItem('store', JSON.stringify(store.getState()));
-});
+store.subscribe(localStorageSub);

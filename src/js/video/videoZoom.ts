@@ -25,10 +25,8 @@ function transformation(container: HTMLDivElement) {
   return transform;
 }
 
-function zoomVideo(videoNum: string) {
+function zoomVideo(videoNum: string, state: Obj) {
   const container = videoContainers[parseInt(videoNum, 10) - 1];
-
-  const { [videoNum]: state } = store.getState();
 
   if (state.isActive) {
     const { translate, scale } = transformation(container);
@@ -54,10 +52,14 @@ videos.forEach(video => {
     return;
   }
 
-  const { [videoNum]: state } = store.getState();
+  const sub = (data: Obj) => {
+    const { [videoNum]: state } = data;
+    zoomVideo(videoNum, state);
+  };
 
-  video.style.filter = `brightness(${state.brightness}%) contrast(${state.contrast}%)`;
-  state.isActive && zoomVideo(videoNum);
+  sub(store.getState());
+
+  store.subscribe(sub);
 
   video.addEventListener('mousedown', function() {
     store.dispatch({
@@ -65,10 +67,6 @@ videos.forEach(video => {
       payload: {
         num: videoNum
       }
-    });
-
-    requestAnimationFrame(() => {
-      zoomVideo(videoNum);
     });
   });
 });

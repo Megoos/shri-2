@@ -9,18 +9,23 @@ inputs.forEach(input => {
     return;
   }
 
-  const { [videoNum]: state } = store.getState();
+  const sub = (data: Obj) => {
+    const { [videoNum]: state } = data;
+    const video = videos[parseInt(videoNum, 10) - 1];
+    input.value = state[type];
+    input.nextElementSibling && (input.nextElementSibling.textContent = state[type] + '%');
 
-  input.value = state[type];
-  input.nextElementSibling && (input.nextElementSibling.textContent = state[type] + '%');
+    video.style.filter = `brightness(${state.brightness}%) contrast(${state.contrast}%)`;
+  };
+
+  sub(store.getState());
+
+  store.subscribe(sub);
 
   input.oninput = function(event) {
     const target = event.target as HTMLInputElement;
     const { videoNum, type } = target.dataset;
     if (videoNum && type) {
-      const video = videos[parseInt(videoNum, 10) - 1];
-      target.nextElementSibling && (target.nextElementSibling.textContent = target.value + '%');
-
       if (type === 'brightness') {
         store.dispatch({
           type: 'CHANGE_BRIGHTNESS',
@@ -38,10 +43,6 @@ inputs.forEach(input => {
           }
         });
       }
-
-      const { [videoNum]: state } = store.getState();
-
-      video.style.filter = `brightness(${state.brightness}%) contrast(${state.contrast}%)`;
     }
   };
 });
@@ -95,10 +96,17 @@ muteButtons.forEach((mute) => {
     return;
   }
 
-  const { [videoNum]: state } = store.getState();
-  video.muted = state.isMuted;
-  mute.textContent = state.isMuted ? 'off' : 'on';
-  mute.style.backgroundColor = state.isMuted ? 'red' : 'green';
+  const sub = (data: Obj) => {
+    const { [videoNum]: state } = data;
+
+    video.muted = state.isMuted;
+    mute.textContent = state.isMuted ? 'off' : 'on';
+    mute.style.backgroundColor = state.isMuted ? 'red' : 'green';
+  };
+
+  sub(store.getState());
+
+  store.subscribe(sub);
 
   mute.onclick = function() {
     store.dispatch({
@@ -107,11 +115,5 @@ muteButtons.forEach((mute) => {
         num: videoNum
       }
     });
-
-    const { [videoNum]: state } = store.getState();
-
-    video.muted = state.isMuted;
-    mute.textContent = state.isMuted ? 'off' : 'on';
-    mute.style.backgroundColor = state.isMuted ? 'red' : 'green';
   };
 });
